@@ -1,0 +1,47 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="col vh-100">
+        <div class="container d-flex flex-column gap-3 mt-2">
+            <div class="row">
+                <h1>New Question</h1>
+            </div>
+
+            <form class="d-flex flex-column gap-3">
+                <div class="text-danger">
+                    Sorry, this email address allready registred!
+                </div>
+                <div class="row">
+                    <div class="col-2 ">
+                        <label for="inputTitle" class="col-form-label">Title</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control" id="inputTitle">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <label for="Textarea" class="col-form-label">Text</label>
+                    </div>
+                    <div class="col-8">
+                        <textarea class="form-control" placeholder="" id="Textarea" style="height: 200px; max-height: 200px"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <label for="inputTags" class="col-form-label">Tags</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control" id="inputTags">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1 offset-2">
+                        <button type="submit" class="btn btn-primary ">Ask!</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+    <main class="col vh-100 mt-3">
+        {% include 'layouts/question.html' %}
+        <div class="d-flex align-items-center gap-2 mt-3 mb-2">
+            <h1>Answers:</h1>
+        </div>
+        <answers class="d-flex flex-column gap-4">
+            {% for answer in answers %}
+                {% include 'layouts/answer.html' %}
+            {% endfor %}
+            {% include 'layouts/pagination.html' %}
+        </answers>
+        <form class="d-flex flex-column gap-4">
+                <textarea class="form-control" placeholder="" id="Textarea" style="height: 200px; max-height: 200px"></textarea>
+                <div class="col-2  mb-5">
+                    <button type="submit" class="btn btn-primary w-100">Answer</button>
+                </div>
+        </form>
+    </main>
+
+{% endblock %}
