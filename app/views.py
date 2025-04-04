@@ -1,5 +1,4 @@
 from copy import deepcopy
-
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 
@@ -24,7 +23,10 @@ isLogin = True
 
 
 def paginate(objects_list, request, per_page=10):
-    page_number = int(request.GET.get('page', 1))
+    try:
+        page_number = int(request.GET.get('page', 1))
+    except ValueError:
+        page_number = 1
     paginator = Paginator(objects_list, 5)
     try:
         page = paginator.page(page_number)
@@ -57,7 +59,6 @@ def tag(request, tag):
     return render(request, 'tag.html' , context={'tag_questions': page.object_list, 'page_obj':page,'tag':tag})
 def login(request):
     return render(request, 'login.html')
-
 
 def signup(request):
     return render(request, 'signup.html')
