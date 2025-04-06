@@ -18,7 +18,7 @@
             <a href="{% url "ask" %}" class="btn btn-outline-success" type="submit">Ask!</a>
         </form>
         <div class="d-flex gap-2 align-items-center">
-            {% if isLogin %}
+            {% if is_login %}
                 <div class="w-25">
                     <img src="{% static "img/1.jpg" %}" class="img-thumbnail" alt="...">
                 </div>
@@ -47,16 +47,13 @@
         <aside class="col-3 vh-100 mt-5">
             <section class="mb-3">
                 <h3>Popular tags</h3>
-                <div>
-                    <span class="badge rounded-pill text-bg-primary">Primary</span>
-                    <span class="badge rounded-pill text-bg-secondary">Secondary</span>
-                    <span class="badge rounded-pill text-bg-success">Success</span>
-                    <span class="badge rounded-pill text-bg-danger">Danger</span>
-                    <span class="badge rounded-pill text-bg-warning">Warning</span>
-                    <span class="badge rounded-pill text-bg-info">Info</span>
-                    <span class="badge rounded-pill text-bg-light">Light</span>
-                    <span class="badge rounded-pill text-bg-dark">Dark</span>
-                </div>
+                {% if popular_tags %}
+                    {% for tag in popular_tags %}
+                        <a href="{% url "tag" tag.name %}" class="badge rounded-pill text-bg-primary">
+                            {{ tag.name }}
+                        </a>
+                    {% endfor %}
+                {% endif %}
             </section>
 
             <section>
