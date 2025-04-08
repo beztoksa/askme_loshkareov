@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'utils.context_processors.tag_context',
                 'utils.context_processors.is_login',
+                'utils.context_processors.top_profile',
             ],
         },
     },

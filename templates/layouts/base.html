@@ -59,9 +59,9 @@
             <section>
                 <h3>Best members</h3>
                 <div class="d-flex flex-column gap-3">
-                    <a href="#">Member</a>
-                    <a href="#">Member</a>
-                    <a href="#">Member</a>
+                    {% for profile in popular_profiles %}
+                        <a href="#">{{ profile.user.username }}</a>
+                    {% endfor %}
                 </div>
             </section>
         </aside>

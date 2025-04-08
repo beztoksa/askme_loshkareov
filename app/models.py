@@ -17,7 +17,9 @@ class TagManager(models.Manager):
         top_tags = Tag.objects.annotate(q_count=Count('question')).filter(q_count__gt=0)\
                              .order_by('-q_count')[:7]
         return top_tags
-
+class ProfileManager(models.Manager):
+    def popular_profiles(self):
+        return Profile.objects.all().order_by('-rating')[:5]
 
 class Profile(models.Model):
     avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
@@ -25,7 +27,7 @@ class Profile(models.Model):
     rating = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    objects = ProfileManager()
 
 class Question(models.Model):
     objects = QuestionManager()
