@@ -48,7 +48,7 @@ class Command(BaseCommand):
         profiles_records = []
         user_ids = User.objects.values_list('id', flat=True)
         for i in range(ratio):
-            profile = Profile(user_id=user_ids[i],rating=fake.random_int(0,ratio))
+            profile = Profile(user_id=user_ids[i],rating=fake.random_int(0,ratio),avatar=fake.image_url())
             profiles_records.append(profile)
             if i == ratio-1 or i//db_batch_limit!=0:
                 Profile.objects.bulk_create(profiles_records)
