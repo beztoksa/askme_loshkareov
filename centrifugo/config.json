@@ -1,0 +1,28 @@
+{
+  "v3_use_offset": true,
+  "publish": true,
+  "anonymous": true,
+  "client":{
+    "token": {
+      "hmac_secret_key": "secret_key"
+    },
+    "allowed_origins": ["*"]
+  },
+  "admin": {
+    "enabled": true,
+    "password": "password",
+    "secret": "secret"
+  },
+  "http_api": {
+    "key": "key"
+  },
+  "channel": {
+    "without_namespace": {
+      "allow_subscribe_for_client": true
+    }
+  },
+    "http_server": {
+      "port": 8000
+    }
+
+}

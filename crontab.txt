@@ -1,0 +1,1 @@
+* * * * * cd /app && /usr/local/bin/python manage.py cache-quote >> /var/log/cron.log 2>&1

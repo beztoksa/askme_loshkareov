@@ -1,5 +1,5 @@
 from multiprocessing.reduction import recv_handle
-
+from django.contrib.auth.hashers import make_password
 from django.core.management.base import BaseCommand, CommandError
 from faker import Faker
 from django.contrib.auth.models import User
@@ -19,6 +19,7 @@ from app.models import Profile, Tag, Question, Answer, QuestionLike, AnswerLike
 ответы — ratio * 100;
 тэгов - ratio;
 оценок пользователей - ratio * 200;
+исправить рейтинг определять его из количества лайков!!!!
 
 """
 
@@ -40,7 +41,7 @@ class Command(BaseCommand):
         users_records = []
         user_names = [fake.unique.user_name() for _ in range(ratio)]
         for i in range(ratio):
-            user = User(username=user_names[i], email=fake.email(), password=fake.password())
+            user = User(username=user_names[i], email=fake.email(), password=make_password(fake.password()))
             users_records.append(user)
             if i == ratio-1 or i//db_batch_limit!=0:
                 User.objects.bulk_create(users_records)
@@ -48,7 +49,7 @@ class Command(BaseCommand):
         profiles_records = []
         user_ids = User.objects.values_list('id', flat=True)
         for i in range(ratio):
-            profile = Profile(user_id=user_ids[i],rating=fake.random_int(0,ratio),avatar=fake.image_url())
+            profile = Profile(user_id=user_ids[i],rating=fake.random_int(0,ratio),avatar=fake.image_url(),nickname=fake.unique.user_name())
             profiles_records.append(profile)
             if i == ratio-1 or i//db_batch_limit!=0:
                 Profile.objects.bulk_create(profiles_records)

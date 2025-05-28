@@ -1,0 +1,309 @@
+(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://nginx/static/bootstrap.min.css
+This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking nginx (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.27.5
+Server Hostname:        nginx
+Server Port:            80
+
+Document Path:          /static/bootstrap.min.css
+Document Length:        153 bytes
+
+Concurrency Level:      10
+Time taken for tests:   0.146 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Total transferred:      326000 bytes
+HTML transferred:       153000 bytes
+Requests per second:    6867.05 [#/sec] (mean)
+Time per request:       1.456 [ms] (mean)
+Time per request:       0.146 [ms] (mean, across all concurrent requests)
+Transfer rate:          2186.19 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:     0    1   0.6      1       9
+Waiting:        0    1   0.5      1       9
+Total:          0    1   0.6      1       9
+
+Percentage of the requests served within a certain time (ms)
+  50%      1
+  66%      2
+  75%      2
+  80%      2
+  90%      2
+  95%      2
+  98%      2
+  99%      3
+ 100%      9 (longest request)
+
+
+(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://web:8000/static/bootstrap.min.css
+This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking web (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        gunicorn
+Server Hostname:        web
+Server Port:            8000
+
+Document Path:          /static/bootstrap.min.css
+Document Length:        57893 bytes
+
+Concurrency Level:      10
+Time taken for tests:   12.193 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Total transferred:      58139000 bytes
+HTML transferred:       57893000 bytes
+Requests per second:    82.01 [#/sec] (mean)
+Time per request:       121.933 [ms] (mean)
+Time per request:       12.193 [ms] (mean, across all concurrent requests)
+Transfer rate:          4656.37 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:    13  121  11.3    117     163
+Waiting:       12  121  11.3    117     163
+Total:         13  121  11.3    117     163
+
+Percentage of the requests served within a certain time (ms)
+  50%    117
+  66%    123
+  75%    128
+  80%    129
+  90%    132
+  95%    137
+  98%    150
+  99%    156
+ 100%    163 (longest request)
+
+
+(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://web:8000/
+This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking web (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        gunicorn
+Server Hostname:        web
+Server Port:            8000
+
+Document Path:          /
+Document Length:        57595 bytes
+
+Concurrency Level:      10
+Time taken for tests:   12.015 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Total transferred:      57841000 bytes
+HTML transferred:       57595000 bytes
+Requests per second:    83.23 [#/sec] (mean)
+Time per request:       120.150 [ms] (mean)
+Time per request:       12.015 [ms] (mean, across all concurrent requests)
+Transfer rate:          4701.24 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:    14  119   9.6    116     144
+Waiting:       13  119   9.6    116     144
+Total:         14  119   9.6    116     144
+
+Percentage of the requests served within a certain time (ms)
+  50%    116
+  66%    121
+  75%    125
+  80%    128
+  90%    130
+  95%    134
+  98%    138
+  99%    141
+ 100%    144 (longest request)
+
+
+(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://nginx/
+This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking nginx (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.27.5
+Server Hostname:        nginx
+Server Port:            80
+
+Document Path:          /
+Document Length:        57706 bytes
+
+Concurrency Level:      10
+Time taken for tests:   12.076 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Total transferred:      57956000 bytes
+HTML transferred:       57706000 bytes
+Requests per second:    82.81 [#/sec] (mean)
+Time per request:       120.763 [ms] (mean)
+Time per request:       12.076 [ms] (mean, across all concurrent requests)
+Transfer rate:          4686.68 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:    14  120  10.3    117     158
+Waiting:       13  120  10.3    116     158
+Total:         14  120  10.3    117     158
+
+Percentage of the requests served within a certain time (ms)
+  50%    117
+  66%    122
+  75%    126
+  80%    128
+  90%    131
+  95%    135
+  98%    140
+  99%    144
+ 100%    158 (longest request)
+
+(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker-compose exec nginx curl -I http://nginx/
+time="2025-05-23T22:28:16+03:00" level=warning msg="C:\\Users\\misha\\PycharmProjects\\askme_loshkareov\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+HTTP/1.1 302 Found
+Server: nginx/1.27.5
+Date: Fri, 23 May 2025 19:28:16 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 0
+Connection: keep-alive
+Location: /login/?next=/
+X-Frame-Options: DENY
+Vary: Cookie
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+X-Cache-Status: HIT
+
+(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://nginx/
+This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking nginx (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.27.5
+Server Hostname:        nginx
+Server Port:            80
+
+Document Path:          /
+Document Length:        58116 bytes
+
+Concurrency Level:      10
+Time taken for tests:   12.247 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Total transferred:      58366000 bytes
+HTML transferred:       58116000 bytes
+Requests per second:    81.65 [#/sec] (mean)
+Time per request:       122.469 [ms] (mean)
+Time per request:       12.247 [ms] (mean, across all concurrent requests)
+Transfer rate:          4654.06 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:    14  122  10.3    119     166
+Waiting:       13  121  10.3    118     165
+Total:         14  122  10.3    119     166
+
+Percentage of the requests served within a certain time (ms)
+  50%    119
+  66%    122
+  75%    128
+  80%    130
+  90%    132
+  95%    137
+  98%    141
+  99%    145
+ 100%    166 (longest request)
+
+
+
+
+
+
+
+
+
+
+

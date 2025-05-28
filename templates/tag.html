@@ -6,7 +6,7 @@
             <h1>Tag: {{ tag.name }}</h1>
         </div>
         <articles class="d-flex flex-column gap-4">
-            {% for question in tag_questions %}
+            {% for pack in packs %}
                 {% include 'layouts/question.html' %}
             {% endfor %}
             {% include 'layouts/pagination.html' %}

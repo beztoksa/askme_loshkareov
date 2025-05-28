@@ -1,8 +1,0 @@
-services:
-  mysql:
-    build: .
-    restart: always
-    environment:
-      MYSQL_DATABASE: 'my_database'
-    ports:
-      - "3306:3306"

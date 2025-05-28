@@ -20,13 +20,16 @@
         <div class="d-flex gap-2 align-items-center">
             {% if is_login %}
                 <div class="w-25">
-                    <img src="{% static "img/1.jpg" %}" class="img-thumbnail" alt="...">
+                    <img {% if profile.avatar %}src="{{ MEDIA_URL }}{{ profile.avatar.url}}"{% endif %} class="img-fluid" style="width: 200px; height: auto;" alt="...">
                 </div>
                 <div class="content">
-                    <div class="content__name">Mr. Loshkareov</div>
+                    <div class="content__name">{{ profile.nickname }}</div>
                     <div class="content__links">
-                        <a href="{% url "settings" %}">Settings</a>
-                        <a href="#">Log out</a>
+                        <a href="{% url "edit_profile" %}">Settings</a>
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link p-0 border-0 align-baseline">Logout</button>
+                        </form>
                     </div>
                 </div>
             {% else %}

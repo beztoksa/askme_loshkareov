@@ -7,11 +7,11 @@
             <a href="{% url "index" %}">New Questions</a>
         </div>
         <articles class="d-flex flex-column gap-4">
-            {% for question in hot_questions %}
+            {% for pack in packs %}
                 {% include 'layouts/question.html' %}
             {% endfor %}
             {% include 'layouts/pagination.html' %}
         </articles>
     </main>
-
+    <script src="{% static 'js/question_count.js' %}"></script>
 {% endblock %}

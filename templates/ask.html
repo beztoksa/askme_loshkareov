@@ -1,13 +1,29 @@
 {% extends "layouts/base.html" %}
 {% load static %}
-
+{% load bootstrap5 %}
 {% block content %}
     <main class="col vh-100">
         <div class="container d-flex flex-column gap-3 mt-2">
             <div class="row">
                 <h1>New Question</h1>
             </div>
+            <form action="" method="POST" class="d-flex flex-column gap-3">
+                <div class="row">
+                    <div class="col-6">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                    </div>
+                </div>
+                {% buttons %}
+                    <div class="row">
+                        <div class="col-1 ">
+                            <button type="submit" class="btn btn-primary w-100">ASK!</button>
+                        </div>
+                    </div>
+                {% endbuttons %}
+            </form>
 
+            <!--
             <form class="d-flex flex-column gap-3">
                 <div class="text-danger">
                     Sorry, this email address allready registred!
@@ -42,6 +58,7 @@
                     </div>
                 </div>
             </form>
+            -->
         </div>
     </main>
 {% endblock %}
