@@ -1,15 +1,14 @@
 
 services:
   db:
-    image: mysql:latest
+    image: postgres:15
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: pass
-      MYSQL_DATABASE: 'my_database'
-    volumes:
-      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      POSTGRES_DB: my_database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
     ports:
-      - "3306:3306"
+      - "5432:5432"
 
   web:
     build: .

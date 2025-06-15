@@ -27,23 +27,33 @@ for (const item of likeButtons)
             {
                 method: 'POST',
                 body: new URLSearchParams({
-                   'value' : value
+                    'value': value
                 }),
                 headers: {'X-CSRFToken': csrftoken},
                 mode: 'same-origin' // Do not send CSRF token to another domain.
             }
         );
-        fetch(request).then(response => {
-            response.json().then((data) => {
+        fetch(request)
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.error || 'Произошла ошибка');
+                    });
+                }
+
+                return response.json();
+            })
+
+
+            .then((data) => {
                 const counter = document.querySelector(`div[data-question-id="${item.dataset.questionId}"]`)
                 counter.innerHTML = data.question_rating
                 document.querySelectorAll(`.vote-btn[data-question-id="${item.dataset.questionId}"]`).forEach(b => b.classList.remove('disabled'));
 
-            if (data.user_vote === -1) {
-                document.querySelector(`.upvote[data-question-id="${item.dataset.questionId}"]`).classList.add('disabled');
-            } else if (data.user_vote === 1) {
-                document.querySelector(`.downvote[data-question-id="${item.dataset.questionId}"]`).classList.add('disabled');
-            }
+                if (data.user_vote === -1) {
+                    document.querySelector(`.upvote[data-question-id="${item.dataset.questionId}"]`).classList.add('disabled');
+                } else if (data.user_vote === 1) {
+                    document.querySelector(`.downvote[data-question-id="${item.dataset.questionId}"]`).classList.add('disabled');
+                }
             })
-        })
     })

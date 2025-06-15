@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.template.context_processors import request
 
-from app.models import User, Profile, Question, Tag, Answer
+from app.models import User, Profile, Question, Tag, Answer, QuestionLike, AnswerLike
 
 
 class LoginForm(forms.Form):
@@ -139,3 +139,67 @@ class AnswerCreateForm(forms.ModelForm):
         answer.save()
         return answer
 
+class QuestionRatingForm(forms.Form):
+    value = forms.IntegerField(min_value=-1, max_value=1)
+
+    def __init__(self, *args, question=None, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.question = question
+        self.user = user
+        self.user_vote = 0
+
+    def clean(self):
+        cleaned_data = super().clean()
+        value = cleaned_data.get('value')
+
+        if self.question is None or self.user is None:
+            raise forms.ValidationError("Отсутствуют необходимые данные.")
+
+        return cleaned_data
+
+    def save(self):
+        vote, is_created = QuestionLike.objects.get_or_create(
+            question=self.question,
+            profile=self.user.profile,
+            value = self.cleaned_data['value'],
+        )
+        if not is_created:
+            vote.delete()
+            self.user_vote = 0
+        else:
+            self.user_vote = self.cleaned_data['value']
+        return self.user_vote
+
+
+
+
+class AnswerRatingForm(forms.Form):
+    value = forms.IntegerField(min_value=-1, max_value=1)
+
+    def __init__(self, *args, answer=None, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.answer= answer
+        self.user = user
+        self.user_vote = 0
+
+    def clean(self):
+        cleaned_data = super().clean()
+        value = cleaned_data.get('value')
+
+        if self.answer is None or self.user is None:
+            raise forms.ValidationError("Отсутствуют необходимые данные.")
+
+        return cleaned_data
+
+    def save(self):
+        vote, is_created = AnswerLike.objects.get_or_create(
+            answer=self.answer,
+            profile=self.user.profile,
+            value = self.cleaned_data['value'],
+        )
+        if not is_created:
+            vote.delete()
+            self.user_vote = 0
+        else:
+            self.user_vote = self.cleaned_data['value']
+        return self.user_vote

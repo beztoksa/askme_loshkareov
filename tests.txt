@@ -1,4 +1,4 @@
-(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://nginx/static/bootstrap.min.css
+(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://nginx/static/bootstrap/css/bootstrap.min.css
 This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -21,41 +21,42 @@ Server Software:        nginx/1.27.5
 Server Hostname:        nginx
 Server Port:            80
 
-Document Path:          /static/bootstrap.min.css
-Document Length:        153 bytes
+Document Path:          /static/bootstrap/css/bootstrap.min.css
+Document Length:        232803 bytes
 
 Concurrency Level:      10
-Time taken for tests:   0.146 seconds
+Time taken for tests:   0.462 seconds
 Complete requests:      1000
 Failed requests:        0
-Non-2xx responses:      1000
-Total transferred:      326000 bytes
-HTML transferred:       153000 bytes
-Requests per second:    6867.05 [#/sec] (mean)
-Time per request:       1.456 [ms] (mean)
-Time per request:       0.146 [ms] (mean, across all concurrent requests)
-Transfer rate:          2186.19 [Kbytes/sec] received
+Total transferred:      233158000 bytes
+HTML transferred:       232803000 bytes
+Requests per second:    2165.97 [#/sec] (mean)
+Time per request:       4.617 [ms] (mean)
+Time per request:       0.462 [ms] (mean, across all concurrent requests)
+Transfer rate:          493177.96 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
 Connect:        0    0   0.0      0       0
-Processing:     0    1   0.6      1       9
-Waiting:        0    1   0.5      1       9
-Total:          0    1   0.6      1       9
+Processing:     2    4   1.0      4      22
+Waiting:        0    1   0.9      1      19
+Total:          2    5   1.0      4      22
+WARNING: The median and mean for the total time are not within a normal deviation
+        These results are probably not that reliable.
 
 Percentage of the requests served within a certain time (ms)
-  50%      1
-  66%      2
-  75%      2
-  80%      2
-  90%      2
-  95%      2
-  98%      2
-  99%      3
- 100%      9 (longest request)
+  50%      4
+  66%      5
+  75%      5
+  80%      5
+  90%      5
+  95%      5
+  98%      6
+  99%      6
+ 100%     22 (longest request)
 
 
-(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://web:8000/static/bootstrap.min.css
+(.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://web:8000/static/bootstrap/css/bootstrap.min.css
 This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -78,38 +79,37 @@ Server Software:        gunicorn
 Server Hostname:        web
 Server Port:            8000
 
-Document Path:          /static/bootstrap.min.css
-Document Length:        57893 bytes
+Document Path:          /static/bootstrap/css/bootstrap.min.css
+Document Length:        232803 bytes
 
 Concurrency Level:      10
-Time taken for tests:   12.193 seconds
+Time taken for tests:   5.025 seconds
 Complete requests:      1000
 Failed requests:        0
-Non-2xx responses:      1000
-Total transferred:      58139000 bytes
-HTML transferred:       57893000 bytes
-Requests per second:    82.01 [#/sec] (mean)
-Time per request:       121.933 [ms] (mean)
-Time per request:       12.193 [ms] (mean, across all concurrent requests)
-Transfer rate:          4656.37 [Kbytes/sec] received
+Total transferred:      233176000 bytes
+HTML transferred:       232803000 bytes
+Requests per second:    199.02 [#/sec] (mean)
+Time per request:       50.247 [ms] (mean)
+Time per request:       5.025 [ms] (mean, across all concurrent requests)
+Transfer rate:          45318.53 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
 Connect:        0    0   0.0      0       0
-Processing:    13  121  11.3    117     163
-Waiting:       12  121  11.3    117     163
-Total:         13  121  11.3    117     163
+Processing:     6   50   4.4     51      68
+Waiting:        4   48   4.4     49      66
+Total:          6   50   4.4     51      68
 
 Percentage of the requests served within a certain time (ms)
-  50%    117
-  66%    123
-  75%    128
-  80%    129
-  90%    132
-  95%    137
-  98%    150
-  99%    156
- 100%    163 (longest request)
+  50%     51
+  66%     51
+  75%     52
+  80%     52
+  90%     53
+  95%     54
+  98%     59
+  99%     64
+ 100%     68 (longest request)
 
 
 (.venv) PS C:\Users\misha\PycharmProjects\askme_loshkareov> docker run --rm --network askme_loshkareov_default jordi/ab -n 1000 -c 10 http://web:8000/
@@ -297,7 +297,15 @@ Percentage of the requests served within a certain time (ms)
   99%    145
  100%    166 (longest request)
 
-
+Были проведены измерения скорости загрузки статических и динамических документов.
+В качестве статического документа выступал bootstrap.min.css, который лежит в статических файлах,
+в качестве динамического – главная страница по адресу localhost.
+Первый два измерения сравнивали отдачу статического документа через nginx и gunicorn.
+Nginx быстрее, потому что он предназначен для отдачи статик, а gunicorn-нет.
+Далее отдавался динамический документ.
+Он обрабатывается быстрее напрямую через gunicorn, так как не тратиться время на проксирование запроса через nginx.
+Наконец было проведено сравнение передачи динамического документа через nginx с использованием кэша и без него.
+Конечно, если кэш используется страница, загружается быстрее.
 
 
 

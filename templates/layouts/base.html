@@ -13,14 +13,20 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
         <a class="navbar-brand" href="{% url "index" %}">AskLoshkareov</a>
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <div class="d-flex">
+            <form method="get" action="{% url 'search_results' %}" id="search-form" autocomplete="off">
+                <input class="form-control me-2" type="search" name="q" id="search-box" placeholder="Search"
+                       aria-label="Search">
+                <ul id="suggestions-list"
+                    style="border: 1px solid #ccc; display: none; position: absolute; background: white; list-style: none; padding: 0; margin: 0;"></ul>
+            </form>
             <a href="{% url "ask" %}" class="btn btn-outline-success" type="submit">Ask!</a>
-        </form>
+        </div>
         <div class="d-flex gap-2 align-items-center">
             {% if is_login %}
                 <div class="w-25">
-                    <img {% if profile.avatar %}src="{{ MEDIA_URL }}{{ profile.avatar.url}}"{% endif %} class="img-fluid" style="width: 200px; height: auto;" alt="...">
+                    <img {% if profile.avatar %}src="{{ MEDIA_URL }}{{ profile.avatar.url }}"{% endif %}
+                         class="img-fluid" style="width: 200px; height: auto;" alt="...">
                 </div>
                 <div class="content">
                     <div class="content__name">{{ profile.nickname }}</div>
@@ -71,6 +77,7 @@
     </div>
 </div>
 <script src="{% static "bootstrap/js/bootstrap.bundle.js" %}"></script>
+<script src="{% static "js/fulltext_search.js" %}"></script>
 </body>
 
 </html>

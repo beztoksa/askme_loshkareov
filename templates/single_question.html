@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load static %}
-{% load bootstrap5 %}
+{% load django_bootstrap5 %}
 {% load widget_tweaks %}
 {% block content %}
     <main class="col vh-100 mt-3">
@@ -71,13 +71,11 @@
                     {{ form.content|attr:"placeholder: Enter your answer here." }}
                 </div>
             </div>
-            {% buttons %}
                 <div class="row">
                     <div class="col-2 mb-5 ">
-                        <button type="submit" class="btn btn-primary w-100">Answer</button>
+                        {% bootstrap_button "Answer" button_type="submit" button_class="btn btn-primary w-100" %}
                     </div>
                 </div>
-            {% endbuttons %}
         </form>
         <!--
         <form class="d-flex flex-column gap-4">

@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-5358-y%=_=!=3)f$2%brnt^l8fg8zznzqo%0*01*2h1o1%d6&q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+]
 
 # Application definition
 
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'widget_tweaks',
-    'bootstrap5',
+    'django_bootstrap5',
     'django_extensions',
 
 ]
@@ -88,14 +89,12 @@ WSGI_APPLICATION = 'askme_loshkareov.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'my_database',
-        'USER': 'root',
+        'USER': 'postgres',
         'PASSWORD': 'pass',
         'HOST': 'db',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"}
+        'PORT': '5432',
     }
 }
 
@@ -133,9 +132,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
-#STATICFILES_DIRS = [
- #   BASE_DIR / "static",
-#]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

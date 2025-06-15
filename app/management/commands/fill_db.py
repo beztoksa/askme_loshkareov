@@ -49,7 +49,7 @@ class Command(BaseCommand):
         profiles_records = []
         user_ids = User.objects.values_list('id', flat=True)
         for i in range(ratio):
-            profile = Profile(user_id=user_ids[i],rating=fake.random_int(0,ratio),avatar=fake.image_url(),nickname=fake.unique.user_name())
+            profile = Profile(user_id=user_ids[i],avatar=fake.image_url(),nickname=fake.unique.user_name())
             profiles_records.append(profile)
             if i == ratio-1 or i//db_batch_limit!=0:
                 Profile.objects.bulk_create(profiles_records)
@@ -72,7 +72,7 @@ class Command(BaseCommand):
         profiles_ids = list(Profile.objects.values_list('id', flat=True))
         for i in range(count_q):
             question = Question(title=fake.sentence(), content=fake.text(),
-                                profile_id=random.choice(profiles_ids), rating=fake.random_int(0, count_q))
+                                profile_id=random.choice(profiles_ids))
             question_records.append(question)
             if i == count_q-1 or i//db_batch_limit!=0:
                 Question.objects.bulk_create(question_records)
@@ -83,7 +83,7 @@ class Command(BaseCommand):
         #profiles_ids = list(Profile.objects.values_list('id', flat=True))
         question_ids = list(Question.objects.values_list('id', flat=True))
         for i in range(count_a):
-            answer = Answer(content=fake.text(),profile_id=random.choice(profiles_ids),rating=fake.random_int(0,count_a), question_id = random.choice(question_ids))
+            answer = Answer(content=fake.text(),profile_id=random.choice(profiles_ids),question_id = random.choice(question_ids))
             answers_records.append(answer)
             if i == count_a-1 or i//db_batch_limit!=0:
                 Answer.objects.bulk_create(answers_records)
@@ -124,7 +124,7 @@ class Command(BaseCommand):
             for question_id in question_ids:
                # count_question_profiles =random.randint(count_profiles,count_profiles+10)
                 for profile_id in question_profile_ids:
-                    question_like = QuestionLike(question_id=question_id,profile_id=profile_id)
+                    question_like = QuestionLike(question_id=question_id,profile_id=profile_id,value=random.choice([1, -1]))
                     like_question_records.append(question_like)
                     amount +=1
                     if amount==count_like_question or amount//db_batch_limit!=0:
@@ -143,7 +143,7 @@ class Command(BaseCommand):
             for answer_id in answer_ids:
                 #count_answer_profiles =random.randint(count_profiles,count_profiles+10)
                 for profile_id in answer_profile_ids:
-                    answer_like = AnswerLike(answer_id=answer_id,profile_id=profile_id)
+                    answer_like = AnswerLike(answer_id=answer_id,profile_id=profile_id,value=random.choice([1, -1]))
                     like_answer_records.append(answer_like)
                     amount +=1
                     if amount==count_like_answer or amount//db_batch_limit!=0:

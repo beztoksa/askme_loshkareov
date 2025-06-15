@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load static %}
-{% load bootstrap5 %}
+{% load django_bootstrap5 %}
 
 {% block content %}
     <main class="col vh-100">
@@ -16,13 +16,11 @@
                         {% bootstrap_form form %}
                     </div>
                 </div>
-                {% buttons %}
                     <div class="row">
                         <div class="col-2 offset-2">
-                            <button type="submit" class="btn btn-primary w-100">Login!</button>
+                            {% bootstrap_button "Login!" button_type="submit" button_class="btn btn-primary w-100" %}
                         </div>
                     </div>
-                {% endbuttons %}
             <!--
                 <div class="text-danger">
                     Sorry, wrong password!

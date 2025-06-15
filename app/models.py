@@ -4,6 +4,8 @@ from urllib import request
 
 from bs4.diagnose import profile
 from django.contrib.auth.models import User
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVector
 from django.db import models
 from django.db.models import Count, Sum, Value, F
 from django.db.models.functions import Coalesce
@@ -51,11 +53,9 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='uploads/', null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     nickname = models.CharField(max_length=50, null=True, blank=True)
-    rating = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     objects = ProfileManager()
-    count = models.IntegerField(default=0)
 
 class Question(models.Model):
     objects = QuestionManager()
@@ -76,10 +76,15 @@ class Question(models.Model):
         return vote.value if vote else 0
     def __str__(self):
         return self.title
+
     class Meta:
         indexes = [
             models.Index(fields=['created_at']),
-        ]
+            GinIndex(
+                SearchVector('title', 'content', config='russian'),
+                name='question_search_idx',
+            ),        ]
+
 
 class QuestionLike(models.Model):
     QUESTION_VOTE_CHOICES = (
@@ -88,7 +93,7 @@ class QuestionLike(models.Model):
     )
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='votes')
-    value = models.SmallIntegerField(choices=QUESTION_VOTE_CHOICES)
+    value = models.SmallIntegerField(choices=QUESTION_VOTE_CHOICES, default=1)
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['profile', 'question'], name='unique_question'),

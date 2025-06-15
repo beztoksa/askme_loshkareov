@@ -1,5 +1,6 @@
 from audioop import reverse
 from copy import deepcopy, error
+from idlelib.iomenu import errors
 from lib2to3.fixes.fix_input import context
 from traceback import print_tb
 
@@ -8,35 +9,45 @@ from cent import Client, PublishRequest
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from app.forms import LoginForm, ProfileCreateForm, ProfileUpdateForm, QuestionCreateForm, AnswerCreateForm
+from app.forms import LoginForm, ProfileCreateForm, ProfileUpdateForm, QuestionCreateForm, AnswerCreateForm, \
+    QuestionRatingForm, AnswerRatingForm
 from app.models import Question, Tag, User, Profile, QuestionLike, Answer, AnswerLike
+
+
 def get_cent_client():
     api_url = f'http://centrifugo:8000/api'
     client = Client(api_url, settings.CENTRIFUGO_API_KEY)
     return client
+
 
 def paginate(objects_list, request, per_page=10):
     page_number = request.GET.get('page', 1)
     paginator = Paginator(objects_list, 5)
     try:
         page = paginator.page(page_number)
-    except (PageNotAnInteger,EmptyPage):
+    except (PageNotAnInteger, EmptyPage):
         page = paginator.page(1)
     return page
+
 
 class PackQuestion:
     def __init__(self, question, profile):
         self.question = question
         self.vote = question.get_user_vote(profile)
+
+
 class PackAnswer:
     def __init__(self, answer, profile):
         self.answer = answer
         self.vote = answer.get_user_vote(profile)
+
+
 def packing(page, profile, pack_class=PackQuestion):
     itmes = page.object_list
     packs = []
@@ -44,6 +55,7 @@ def packing(page, profile, pack_class=PackQuestion):
         pack = pack_class(obj, profile)
         packs.append(pack)
     return packs
+
 
 @login_required(login_url='login')
 # Create your views here.
@@ -74,7 +86,7 @@ def question(request, question_id):
     #
     form = AnswerCreateForm(request=request, question_id=question_id)
     if request.method == 'POST':
-        form = AnswerCreateForm(request.POST, request=request, question_id = question_id)
+        form = AnswerCreateForm(request.POST, request=request, question_id=question_id)
         if form.is_valid():
             answer = form.save()
             data = {
@@ -121,10 +133,13 @@ def login(request):
                 form.add_error(field=None, error="User not found")
     return render(request, 'login.html', {'form': form})
 
+
 """
 стоит ли переделовать форму?
 сделать две формы или воспользоваться наследованием ? 
 """
+
+
 def signup(request):
     form = ProfileCreateForm()
     if request.method == 'POST':
@@ -151,47 +166,48 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             return redirect(reverse('edit_profile'))
-    return render(request, 'settings.html',{'form': form})
+    return render(request, 'settings.html', {'form': form})
+
 
 @login_required(login_url=reverse_lazy('login'))
 def ask(request):
     form = QuestionCreateForm()
     if request.method == 'POST':
-        form = QuestionCreateForm(request.POST, request = request)
+        form = QuestionCreateForm(request.POST, request=request)
         if form.is_valid():
             question = form.save()
             return redirect('question', question.id)
     return render(request, 'ask.html', {'form': form})
+
+
 @login_required(login_url=reverse_lazy('login'))
 def QuestionRating(request, question_id):
-    print(request.POST)
-    value = int(request.POST.get('value',0))
-    question = Question.objects.get(id=question_id)
-    vote, is_created = QuestionLike.objects.get_or_create(question=question, profile=request.user.profile, value=value)
-    if not is_created:
-        vote.delete()
-        user_vote = 0
-    else:
-        user_vote = value
-    return JsonResponse({'question_rating': question.rating(), 'user_vote': user_vote})
-
-
+    question = get_object_or_404(Question, id=question_id)
+    if request.method == 'POST':
+        form = QuestionRatingForm(request.POST, question=question, user=request.user)
+        if form.is_valid():
+            user_vote = form.save()
+            return JsonResponse({'question_rating': question.rating(), 'user_vote': user_vote})
+        print(form.errors)
+        return JsonResponse({'errors': form.errors.get_json_data()}, status=400)
+    return JsonResponse(status=400)
 
 
 @login_required(login_url=reverse_lazy('login'))
 def AnswerRating(request, answer_id):
-    print(request.POST)
-    value = int(request.POST.get('value',0))
-    answer = Answer.objects.get(id=answer_id)
-    vote, is_created = AnswerLike.objects.get_or_create(answer=answer, profile=request.user.profile, value=value)
-    if not is_created:
-        vote.delete()
-        user_vote = 0
-    else:
-        user_vote = value
-    return JsonResponse({'answer_rating': answer.rating(), 'user_vote': user_vote})
+    answer = get_object_or_404(Answer, id=answer_id)
+    if request.method == 'POST':
+        form = AnswerRatingForm(request.POST, answer=answer, user=request.user)
+        if form.is_valid():
+            user_vote = form.save()
+            return JsonResponse({'answer_rating': answer.rating(), 'user_vote': user_vote})
+        print(form.errors)
+        return JsonResponse({'errors': form.errors.get_json_data()}, status=400)
+    return JsonResponse(status=400)
+
+
 @login_required(login_url=reverse_lazy('login'))
-def correct(request,question_id, answer_id):
+def correct(request, question_id, answer_id):
     answer = Answer.objects.get(id=answer_id)
     question = Question.objects.get(id=question_id)
     if question.profile == request.user.profile:
@@ -200,3 +216,57 @@ def correct(request,question_id, answer_id):
     print(answer.flag_correct)
     return JsonResponse({'correct': answer.flag_correct})
 
+
+def search_results(request):
+    query = request.GET.get('q', '')
+    results = []
+    if query:
+        search_vector = (
+                SearchVector('title', weight='A') +
+                SearchVector('content', weight='B')
+        )
+
+        search_query = SearchQuery(query)
+
+        results = (
+            Question.objects
+            .annotate(
+                search=search_vector,
+                rank=SearchRank(search_vector, search_query)
+            )
+            .filter(search=search_query)
+            .order_by('-rank')
+        )
+    page = paginate(results, request, per_page=5)
+    packs = packing(page, request.user.profile, PackQuestion)
+
+    return render(request, 'search_results.html', {
+        'packs': packs,
+        'page_obj': page
+    })
+
+
+def search_suggestions(request):
+    query = request.GET.get('q', '').strip()
+
+    if not query:
+        return JsonResponse({'suggestions': []})
+
+    search_vector = (
+            SearchVector('title', weight='A') +
+            SearchVector('content', weight='B')
+    )
+
+    search_query = SearchQuery(query)
+
+    suggestions = (
+        Question.objects
+        .annotate(
+            search=search_vector,
+            rank=SearchRank(search_vector, search_query)
+        )
+        .filter(search=search_query)
+        .order_by('-rank')
+        .values('id', 'title')[:5]
+    )
+    return JsonResponse({'suggestions': list(suggestions)})

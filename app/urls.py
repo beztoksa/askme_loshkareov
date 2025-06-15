@@ -21,7 +21,8 @@ from django.contrib import admin
 from django.urls import path
 from app import views
 from django.conf.urls.static import static
-#from django.conf import settings
+
+# from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
@@ -33,9 +34,11 @@ urlpatterns = [
     path('tag/<tag_name>', views.tag, name="tag"),
     path('ask/', views.ask, name="ask"),
     path('logout/', views.logout, name="logout"),
-    path('<question_id>/qlike',views.QuestionRating, name="QuestionRating" ),
-    path('<answer_id>/alike',views.AnswerRating, name="AnswerRating" ),
-    path('<question_id>/<answer_id>/correct',views.correct, name="correct"),
+    path('<int:question_id>/qlike', views.QuestionRating, name="QuestionRating"),
+    path('<int:answer_id>/alike', views.AnswerRating, name="AnswerRating"),
+    path('<int:question_id>/<int:answer_id>/correct', views.correct, name="correct"),
+    path('search/', views.search_results, name='search_results'),
+    path('search_suggestions/', views.search_suggestions, name='search_suggestions'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load static %}
-{% load bootstrap5 %}
+{% load django_bootstrap5 %}
 {% block content %}
     <main class="col vh-100">
         <div class="container d-flex flex-column gap-3 mt-2">
@@ -14,13 +14,11 @@
                         {% bootstrap_form form %}
                     </div>
                 </div>
-                {% buttons %}
                     <div class="row">
                         <div class="col-1 ">
-                            <button type="submit" class="btn btn-primary w-100">ASK!</button>
+                            {% bootstrap_button "ASK!" button_type="submit" button_class="btn btn-primary w-100" %}
                         </div>
                     </div>
-                {% endbuttons %}
             </form>
 
             <!--
